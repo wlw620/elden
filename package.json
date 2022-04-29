@@ -10,9 +10,10 @@
     "build": "elden build",
     "dev": "elden dev",
     "changeset": "changeset",
-    "changeset:version": "changeset version",
+    "version": "changeset version",
     "changeset:publish": "changeset publish",
-    "ci:publish": "pnpm run build && pnpm run changeset && pnpm run changeset:version && changeset:publish"
+    "release": "pnpm build && pnpm release:only",
+    "release:only": "changeset publish --registry=https://company-registry/"
   },
   "workspaces": [
     "packages/*",

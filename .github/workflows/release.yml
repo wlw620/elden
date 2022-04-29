@@ -8,32 +8,38 @@ on:
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
-  version:
-    timeout-minutes: 15
+  release:
+    name: Release
     runs-on: ubuntu-latest
     steps:
-      - name: checkout code repository
+      - name: Checkout Repo
         uses: actions/checkout@v2
         with:
+          # This makes Actions fetch all Git history so that Changesets can generate changelogs with the correct commits
           fetch-depth: 0
-      - name: setup node.js
+
+      - name: Setup Node.js 16.x
         uses: actions/setup-node@v2
         with:
-          node-version: 16
-      - name: install pnpm
-        run: npm i pnpm@latest -g
-      - name: Setup npmrc
-        run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
-      - name: setup pnpm config
-        run: pnpm config set store-dir $PNPM_CACHE_FOLDER
-      - name: install dependencies
-        run: pnpm install
-      - name: create and publish versions
-        uses: changesets/action@master
+          node-version: 16.x
+
+      - name: Install pnpm
+        run: npm install pnpm -g
+
+      - name: Install Dependencies
+        run: pnpm i
+
+      - name: Create Release Pull Request or Publish to npm
+        id: changesets
+        uses: changesets/action@v1
         with:
-          version: pnpm ci:version
-          commit: "chore: update versions"
-          title: "chore: update versions"
-          publish: pnpm ci:publish
+          publish: pnpm run release
+          version: pnpm run version
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Send a Slack notification if a publish happens
+        if: steps.changesets.outputs.published == 'true'
+        # You can do something when a publish happens.
+        run: my-slack-bot send-notification --message "A new version of ${GITHUB_REPOSITORY} was published!"

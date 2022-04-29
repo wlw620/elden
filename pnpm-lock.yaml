@@ -19,9 +19,6 @@ importers:
       turbo: registry.npmmirror.com/turbo/1.2.5
       typescript: 4.6.3
 
-  packages/complier:
-    specifiers: {}
-
   packages/components:
     specifiers: {}
 
