@@ -1,0 +1,13 @@
+{
+  "name": "@tuaner/elden-components",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "echo \"ON BUILD\" && exit 0"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {},
+  "dependencies": {}
+}
