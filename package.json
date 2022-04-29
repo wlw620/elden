@@ -12,7 +12,7 @@
     "changeset": "changeset",
     "changeset:version": "changeset version",
     "changeset:publish": "changeset publish",
-    "release": "pnpm run build && pnpm run changeset && pnpm run changeset:version"
+    "ci:publish": "pnpm run build && pnpm run changeset && pnpm run changeset:version && changeset:publish"
   },
   "workspaces": [
     "packages/*",
